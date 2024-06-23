@@ -1,0 +1,71 @@
+.header,
+.footer {
+    height: var(--sub-height);
+    width: var(--main-width);
+}
+
+.header__date,
+.footer__date,
+.content__heading {
+    height: var(--sub-height);
+    padding-left: 24px;
+}
+
+.header__date {
+    color: var(--header-text-color);
+}
+
+.header__month,
+.header__year,
+.footer__day,
+.content__year {
+    padding: 0 3px;
+}
+
+.content {
+    height: var(--content-height);
+    width: var(--main-width);
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: var(--border-color);
+}
+
+.content__arrow {
+    margin-left: auto;
+    margin-right: 24px;
+}
+
+.content__weekday {
+    height: 30px;
+    font-size: 1.1rem;
+}
+
+.content__weekday,
+.content__main {
+    width: 100%;
+    padding: 0;
+    flex-wrap: wrap;
+    padding: 0 25px;
+}
+
+.content__day {
+    height: calc(var(--sub-height) - 4px);
+    line-height: calc(var(--sub-height) - 4px);
+}
+
+.content__day:hover {
+    box-shadow: 0 0 0 2px var(--hover-color);
+}
+
+.content__weekday li,
+.content__day {
+    width: calc(var(--sub-height) - 4px);
+    text-align: center;
+    margin: 2px;
+}
+
+.footer__date {
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: 0;
+}

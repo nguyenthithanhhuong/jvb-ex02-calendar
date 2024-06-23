@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+</head>
+<body>
+    <div class="main">
+        <!-- Header section -->
+        <header class="header">
+            <ul class="header__date ul-flex-box">
+                <li class="header__weekday">Sunday,</li>
+                <li class="header__month">June</li>
+                <li class="header__day">23,</li>
+                <li class="header__year">2024</li>
+            </ul>
+        </header>
+
+        <!-- Content section -->
+        <div class="content">
+            <div class="content__heading flex-box">
+                <div class="content__month">June</div>
+                <div class="content__year">2024</div>
+                <div class="content__arrow flex-box">
+                    <div class="content__arrow-down">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="20px" fill="#fff"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+                    </div>
+                    <div class="content__arrow-up">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="20px" fill="#fff"><path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <ul class="content__weekday ul-flex-box">
+                <li>Su</li>
+                <li>Mo</li>
+                <li>Tu</li>
+                <li>We</li>
+                <li>Th</li>
+                <li>Fr</li>
+                <li>Sa</li>
+            </ul>
+            <ul class="content__main ul-flex-box">
+                <li class="content__day not-current-month">26</li>
+                <li class="content__day not-current-month">27</li>
+                <li class="content__day not-current-month">28</li>
+                <li class="content__day">29</li>
+                <li class="content__day">30</li>
+                <li class="content__day">31</li>
+                <li class="content__day">1</li>
+                <li class="content__day active">2</li>
+                <li class="content__day">3</li>
+                <li class="content__day">4</li>
+                <li class="content__day">5</li>
+                <li class="content__day">6</li>
+                <li class="content__day">7</li>
+                <li class="content__day">8</li>
+                <li class="content__day">9</li>
+                <li class="content__day">10</li>
+                <li class="content__day hover-active">11</li>
+                <li class="content__day">12</li>
+                <li class="content__day">13</li>
+                <li class="content__day">14</li>
+                <li class="content__day">15</li>
+                <li class="content__day">16</li>
+                <li class="content__day">17</li>
+                <li class="content__day">18</li>
+                <li class="content__day">19</li>
+                <li class="content__day">20</li>
+                <li class="content__day">21</li>
+                <li class="content__day">22</li>
+                <li class="content__day">23</li>
+                <li class="content__day">24</li>
+                <li class="content__day">25</li>
+                <li class="content__day">26</li>
+                <li class="content__day">27</li>
+                <li class="content__day">28</li>
+                <li class="content__day">29</li>
+                <li class="content__day">30</li>
+                <li class="content__day">1</li>
+                <li class="content__day">2</li>
+                <li class="content__day">3</li>
+                <li class="content__day">4</li>
+                <li class="content__day">5</li>
+                <li class="content__day">6</li>
+            </ul>
+        </div>
+
+        <!-- Footer section -->
+        <footer class="footer">
+            <ul class="footer__date ul-flex-box">
+                <li class="footer__weekday">Sunday</li>
+                <div class="footer__day">23</div>
+            </ul>
+        </footer>
+    </div>
+</body>
+</html>
