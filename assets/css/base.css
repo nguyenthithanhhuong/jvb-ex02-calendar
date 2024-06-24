@@ -1,5 +1,6 @@
 :root {
-    --sub-height: 50px;
+    --header-height: 80px;
+    --footer-height: 50px;
     --content-height: 385px;
 
     --main-width: 400px;
@@ -43,6 +44,7 @@ body {
     align-items: center;
     list-style: none;
     margin: 0;
+    padding: 0;
 }
 
 .flex-box {
@@ -56,10 +58,20 @@ body {
     box-shadow: 0 0 0 2px var(--active-bg-color);
 }
 
+.sub-active {
+    background-color: var(--active-bg-color);
+    border: 2px var(--active-bg-color) solid;
+    box-shadow: 0 0 0 2px var(--active-bg-color);
+}
+
 .hover-active {
     box-shadow: 0 0 0 2px var(--active-bg-color);
 }
 
 .not-current-month {
     opacity: 0.7;
+}
+
+.pointer {
+    cursor: pointer;
 }

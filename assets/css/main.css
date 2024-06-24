@@ -1,24 +1,43 @@
-.header,
-.footer {
-    height: var(--sub-height);
-    width: var(--main-width);
+.header {
+    height: var(--header-height);
 }
 
-.header__date,
 .footer__date,
 .content__heading {
-    height: var(--sub-height);
+    height: var(--footer-height);
     padding-left: 24px;
 }
 
+.header__time-box {
+    height: 60px;
+    line-height: 60px;
+    padding: 6px 0 0 24px;
+}
+
+.header__time {
+    font-size: 3.6rem;
+    font-weight: 300;
+    padding-right: 8px;
+}
+
+.header__merid {
+    font-size: 1.5rem;
+    color: var(--border-color);
+}
+
 .header__date {
+    display: inline-block;
+    height: 20px;
+    padding-bottom: 12px;
+    padding-left: 24px;
     color: var(--header-text-color);
 }
 
-.header__month,
-.header__year,
-.footer__day,
-.content__year {
+.header__date:hover {
+    color: var(--hover-color);
+}
+
+.footer__day {
     padding: 0 3px;
 }
 
@@ -28,6 +47,15 @@
     border-width: 1px 0;
     border-style: solid;
     border-color: var(--border-color);
+}
+
+.content__heading {
+    opacity: 0.8;
+}
+
+.content__heading:nth-child(1):hover,
+.content__heading:nth-child(2):hover {
+    opacity: 1;
 }
 
 .content__arrow {
@@ -49,19 +77,46 @@
 }
 
 .content__day {
-    height: calc(var(--sub-height) - 4px);
-    line-height: calc(var(--sub-height) - 4px);
+    height: calc(var(--footer-height) - 4px);
+    line-height: calc(var(--footer-height) - 4px);
 }
 
-.content__day:hover {
+.content__day:hover,
+.content__month-box li:hover,
+.content__year-box li:hover {
     box-shadow: 0 0 0 2px var(--hover-color);
 }
 
 .content__weekday li,
 .content__day {
-    width: calc(var(--sub-height) - 4px);
+    width: calc(var(--footer-height) - 4px);
     text-align: center;
     margin: 2px;
+}
+
+.content__month-box,
+.content__year-box {
+    padding: 0 36px;
+    flex-wrap: wrap;
+}
+
+.content__month-box li,
+.content__year-box li {
+    width: 80px;
+    height: 80px;
+    margin: 1px;
+    text-align: center;
+    line-height: 80px;
+}
+
+.content__month-box,
+.content__year-box {
+    display: none;
+}
+
+.footer {
+    height: var(--footer-height);
+
 }
 
 .footer__date {

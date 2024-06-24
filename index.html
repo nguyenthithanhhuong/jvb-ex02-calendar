@@ -16,25 +16,23 @@
     <div class="main">
         <!-- Header section -->
         <header class="header">
-            <ul class="header__date ul-flex-box">
-                <li class="header__weekday">Sunday,</li>
-                <li class="header__month">June</li>
-                <li class="header__day">23,</li>
-                <li class="header__year">2024</li>
-            </ul>
+            <div class="header__time-box">
+                <span class="header__time"></span>
+                <span class="header__merid"></span>
+            </div>
+            <div class="header__date pointer"></div>
         </header>
 
         <!-- Content section -->
         <div class="content">
             <div class="content__heading flex-box">
-                <div class="content__month">June</div>
-                <div class="content__year">2024</div>
+                <div class="content__date pointer"></div>
                 <div class="content__arrow flex-box">
-                    <div class="content__arrow-down">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="20px" fill="#fff"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
-                    </div>
-                    <div class="content__arrow-up">
+                    <div class="content__arrow-up pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="20px" fill="#fff"><path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/></svg>
+                    </div>
+                    <div class="content__arrow-down pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="20px" fill="#fff"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
                     </div>
                 </div>
             </div>
@@ -47,8 +45,8 @@
                 <li>Fr</li>
                 <li>Sa</li>
             </ul>
-            <ul class="content__main ul-flex-box">
-                <li class="content__day not-current-month">26</li>
+            <ul class="content__main ul-flex-box pointer">
+                <!-- <li class="content__day not-current-month">26</li>
                 <li class="content__day not-current-month">27</li>
                 <li class="content__day not-current-month">28</li>
                 <li class="content__day">29</li>
@@ -89,7 +87,43 @@
                 <li class="content__day">3</li>
                 <li class="content__day">4</li>
                 <li class="content__day">5</li>
-                <li class="content__day">6</li>
+                <li class="content__day">6</li> -->
+            </ul>
+            <ul class="content__month-box ul-flex-box pointer">
+                <li class="sub-active">Jan</li>
+                <li>Feb</li>
+                <li>Mar</li>
+                <li>Apr</li>
+                <li>May</li>
+                <li>Jun</li>
+                <li>Jul</li>
+                <li>Aug</li>
+                <li>Sep</li>
+                <li>Oct</li>
+                <li>Nov</li>
+                <li>Dec</li>
+                <li>Jan</li>
+                <li>Feb</li>
+                <li>Mar</li>
+                <li>Apr</li>
+            </ul>
+            <ul class="content__year-box ul-flex-box pointer">
+                <li class="sub-active">2020</li>
+                <li>2021</li>
+                <li>2022</li>
+                <li>2023</li>
+                <li>2024</li>
+                <li>2025</li>
+                <li>2026</li>
+                <li>2027</li>
+                <li>2028</li>
+                <li>2029</li>
+                <li>2030</li>
+                <li>2031</li>
+                <li>2032</li>
+                <li>2033</li>
+                <li>2034</li>
+                <li>2035</li>
             </ul>
         </div>
 
@@ -101,5 +135,6 @@
             </ul>
         </footer>
     </div>
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>
