@@ -24,6 +24,7 @@ const contentWeek = $(`.content__weekday`);
 const monthBox = $(`.content__month-box`);
 const yearBox = $(`.content__year-box`);
 
+
 // Render current time in header
 function displayCurrentTime() {
     const now = new Date();
@@ -62,9 +63,12 @@ function currentDate() {
     
     headerDate.textContent = currentHeaderDate;
     contentDate.textContent = currentContentDate;
+    contentDate.textContent = month + " " + year;
 }
 
 currentDate();
+
+
 
 function generateCalendar(year, month) {
     const currentDate = new Date();
@@ -109,41 +113,58 @@ function generateCalendar(year, month) {
     calendar.innerHTML = htmls;
 }
 
+function defaultCalendar() {
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+
+    generateCalendar(year, month);
+}
+
 function showPreviousMonth(year, month) {
-    month--;
-    if (month < 0) {
-        month = 11;
+    let monthIndex = months.indexOf(month);
+    monthIndex--;
+    if (monthIndex < 0) {
+        monthIndex = 11;
         year--;
     }
-    generateCalendar(year, month);
+    generateCalendar(year, monthIndex);
+    contentDate.textContent = months[monthIndex] + " " + year;
 }
 
 function showNextMonth(year, month) {
-    month++;
-    if (month > 11) {
-        month = 0;
+    let monthIndex = months.indexOf(month);
+    monthIndex++;
+    if (monthIndex > 11) {
+        monthIndex = 0;
         year++;
     }
-    generateCalendar(year, month);
+    generateCalendar(year, monthIndex);
+    contentDate.textContent = months[monthIndex] + " " + year;   
 }
 
-function handleCalendar() {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-
-    generateCalendar(currentYear, currentMonth);
-
+function handleCalendar() {    
+    // Bắt sự kiện khi click vào nút Previous
     prevMonthBtn.onclick = function() {
+        let currentTime = contentDate.textContent;
+        let text = currentTime.split(' ');
+        let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
+        let currentMonth = text[0];
         showPreviousMonth(currentYear, currentMonth);
     }
 
+    // Bắt sự kiện khi click vào nút Next
     nextMonthBtn.onclick = function() {
+        let currentTime = contentDate.textContent;
+        let text = currentTime.split(' ');
+        let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
+        let currentMonth = text[0];
         showNextMonth(currentYear, currentMonth);
     }
 }
-
+defaultCalendar();
 handleCalendar();
+
 // showNextMonth(2024, 5)
 
 // generateCalendar();
@@ -157,10 +178,49 @@ contentDate.onclick = function() {
         monthBox.style.display = 'flex';
         calendar.style.display = 'none';
         contentWeek.style.display = 'none';
+        let currentTime = contentDate.textContent;
+        let text = currentTime.split(' ');
+        let currentYear = Number(text[1]);
+        contentDate.textContent = currentYear.toString();
     } else if (countClick === 2) {
         monthBox.style.display = 'none';
         yearBox.style.display = 'flex';
-    } else {
-        calendar.removeEvenListener('click');
+        let currentYear = Number(contentDate.textContent);
+        const startYear = Math.floor(currentYear / 10) * 10;
+        const endYear = startYear + 9;
+        contentDate.textContent = `${startYear}-${endYear}`;
     }
+}
+
+const dayInCalendar = $$(`.content__day`);
+
+let prevDayClick = null;
+
+dayInCalendar.forEach(day => {
+    day.addEventListener('click', function() {
+        if (prevDayClick) {
+            prevDayClick.classList.remove('hover-active');
+        }
+
+        day.classList.add('hover-active');
+
+        prevDayClick = day;
+    });
+});
+
+headerDate.onclick = function() {
+    countClick = 0;
+    const currentDate = new Date();
+    const currentMonth = months[currentDate.getMonth()];
+    const currentYear = currentDate.getFullYear();
+    contentDate.textContent = `${currentMonth} ${currentYear}`;
+    if (calendar.style.display === 'none' || contentWeek.style.display === 'none') {
+        calendar.style.display = 'flex';
+        contentWeek.style.display = 'flex';
+    }
+    if (monthBox.style.display === 'flex' || yearBox.style.display === 'flex') {
+        monthBox.style.display = 'none';
+        yearBox.style.display = 'none';
+    }
+    defaultCalendar();
 }

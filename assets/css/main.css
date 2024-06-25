@@ -87,6 +87,11 @@
     box-shadow: 0 0 0 2px var(--hover-color);
 }
 
+.content__day.active:hover,
+.content__day.hover-active:hover {
+    box-shadow: 0 0 0 2px var(--active-bg-color);
+}
+
 .content__weekday li,
 .content__day {
     width: calc(var(--footer-height) - 4px);
