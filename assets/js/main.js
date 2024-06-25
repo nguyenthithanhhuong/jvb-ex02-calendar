@@ -10,6 +10,11 @@ const months = [
     'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
+const monthInBox = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+]
+
 const headerTime = $(`.header__time`);
 const headerMerid = $(`.header__merid`);
 
@@ -143,6 +148,56 @@ function showNextMonth(year, month) {
     contentDate.textContent = months[monthIndex] + " " + year;   
 }
 
+function generateMonthBox(startMonthIndex) {
+    let html = ''; 
+    const currentMonthIndex = new Date().getMonth();
+
+    for (let i = startMonthIndex; i < startMonthIndex + 16; i++) {
+        const monthIndex = i % 12;
+        const monthName = monthInBox[monthIndex];
+        const className01 = (monthIndex === currentMonthIndex) ? 'sub-active' : ''; 
+        const className02 = (i > 11) ? 'not-current-month' : '';
+
+        html += `<li class="${className01} ${className02}">${monthName}</li>`;
+    }
+
+    monthBox.innerHTML = html;
+} 
+
+generateMonthBox(0);
+
+let currentStartYear = Math.floor(new Date().getFullYear() / 10) * 10;
+
+function updateContentDate(startYear) {
+    const endYear = startYear + 9;
+    contentDate.textContent = `${startYear}-${endYear}`;
+}
+
+function generateYearBox(startYear) {
+    let html = ''; // Khởi tạo chuỗi HTML rỗng
+
+    for (let i = 0; i < 16; i++) {
+        const year = startYear + i;
+        const className = (year === new Date().getFullYear()) ? 'sub-active' : ''; // Thêm class 'active' nếu là năm hiện tại
+        html += `<li class="${className}">${year}</li>`;
+    }
+
+    yearBox.innerHTML = html;
+    updateContentDate(startYear);
+}
+
+generateYearBox(currentStartYear)
+
+function showPreviousDecade() {
+    currentStartYear -= 10;
+    generateYearBox(currentStartYear);
+}
+
+function showNextDecade() {
+    currentStartYear += 10;
+    generateYearBox(currentStartYear);
+}
+
 function handleCalendar() {    
     // Bắt sự kiện khi click vào nút Previous
     prevMonthBtn.onclick = function() {
@@ -151,6 +206,7 @@ function handleCalendar() {
         let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
         let currentMonth = text[0];
         showPreviousMonth(currentYear, currentMonth);
+        showPreviousDecade();
     }
 
     // Bắt sự kiện khi click vào nút Next
@@ -160,11 +216,21 @@ function handleCalendar() {
         let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
         let currentMonth = text[0];
         showNextMonth(currentYear, currentMonth);
+        showNextDecade();
     }
 }
 defaultCalendar();
 handleCalendar();
 
+// prevMonthBtn.onclick = function() {
+//     const currentFirstMonthIndex = monthInBox.indexOf(monthBox.firstChild.textContent);
+//     generateMonthBox(currentFirstMonthIndex - 1);
+// }
+
+// nextMonthBtn.onclick = function() {
+//     const currentFirstMonthIndex = monthInBox.indexOf(monthBox.firstChild.textContent);
+//     generateMonthBox(currentFirstMonthIndex + 1);
+// }
 // showNextMonth(2024, 5)
 
 // generateCalendar();
@@ -224,3 +290,5 @@ headerDate.onclick = function() {
     }
     defaultCalendar();
 }
+
+
