@@ -1,19 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const daysOfWeek = [
-    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-];
-
-const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const monthInBox = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-]
+const PlAYER_STORAGE_KEY = "CALENDAR";
 
 const headerTime = $(`.header__time`);
 const headerMerid = $(`.header__merid`);
@@ -22,273 +10,384 @@ const headerDate = $(`.header__date`);
 const contentDate = $(`.content__date`);
 
 const calendar = $(`.content__main`);
-const prevMonthBtn = $(`.content__arrow-up`);
-const nextMonthBtn = $(`.content__arrow-down`);
+const prevBtn = $(`.content__arrow-up`);
+const nextBtn = $(`.content__arrow-down`);
 
 const contentWeek = $(`.content__weekday`);
 const monthBox = $(`.content__month-box`);
 const yearBox = $(`.content__year-box`);
 
-
-// Render current time in header
-function displayCurrentTime() {
-    const now = new Date();
-    let hours = now.getHours();
-    let meridiem = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12;
+const footerDate = $(`.footer__date`)
 
 
-    hours = String(hours).padStart(2, '0');
-    let minutes = String(now.getMinutes()).padStart(2, '0');
-    let seconds = String(now.getSeconds()).padStart(2, '0');
-
-    let currentTime = `${hours}:${minutes}:${seconds}`;
-
-    headerTime.textContent = currentTime;
-    headerMerid.textContent = meridiem;
-}
-
-displayCurrentTime();
-
-setInterval(displayCurrentTime, 1000);
-
-// Render month and year in content
-function currentDate() {
-    const today = new Date();
-
-    const weekDay = daysOfWeek[today.getDay()];
-    const day = today.getDate();
-    const month = months[today.getMonth()];
-    const year = today.getFullYear();
-  
-    const currentHeaderDate = `${weekDay}, ${month} ${day}, ${year}`;
-    const currentContentDate = `${month} ${year}`;
+const app = {
+    countClick: 0,
+    prevDayClick: null,
+    isMonthClick: false,
+    isYearClick: false,
+    config: JSON.parse(localStorage.getItem(PlAYER_STORAGE_KEY)) || {},
+    daysOfWeek: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
+    ],
+    months: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ],
+    monthsInBox: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+    ],
+    setConfig: function(key, value) {
+        this.setConfig(key) = value;
+        localStorage.getItem(PlAYER_STORAGE_KEY, JSON.stringify(this.config));
+    },
+    // Render current time in header
+    displayCurrentTime: function() {
+        const now = new Date();
+        let hours = now.getHours();
+        let meridiem = hours >= 12 ? 'PM' : 'AM';
     
-    headerDate.textContent = currentHeaderDate;
-    contentDate.textContent = currentContentDate;
-    contentDate.textContent = month + " " + year;
-}
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+    
+    
+        hours = String(hours).padStart(2, '0');
+        let minutes = String(now.getMinutes()).padStart(2, '0');
+        let seconds = String(now.getSeconds()).padStart(2, '0');
+    
+        let currentTime = `${hours}:${minutes}:${seconds}`;
+    
+        headerTime.textContent = currentTime;
+        headerMerid.textContent = meridiem;
+    },
+    // Render current date in header
+    displayCurrentHeaderDate: function() {
+        const today = new Date();
 
-currentDate();
+        const weekDay = this.daysOfWeek[today.getDay()];
+        const day = today.getDate();
+        const month = this.months[today.getMonth()];
+        const year = today.getFullYear();
+      
+        const currentHeaderDate = `${weekDay}, ${month} ${day}, ${year}`;
+        const currentContentDate = `${month} ${year}`;
+        
+        headerDate.textContent = currentHeaderDate;
+        contentDate.textContent = currentContentDate;
+    },
+    // Render current date in footer
+    displayCurrentFooterDate: function() {
+        footerDate.textContent = 'Today';
+    },
+    // generate calendar
+    generateCalendar: function(year, month) {
+        const currentDate = new Date();
+        const today = currentDate.getDate();
 
-
-
-function generateCalendar(year, month) {
-    const currentDate = new Date();
-    const today = currentDate.getDate();
-
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-
-    const firstDayIndex = firstDay.getDay();
-    const lastDayIndex = lastDay.getDay();
-    const lastDayDate = lastDay.getDate();
-
-    const prevLastDay = new Date(year, month, 0).getDate();
-
-    const daysInCalendar = 42;
-    const daysInPrevMonth = firstDayIndex;
-    const daysInNextMonth = daysInCalendar - (lastDayDate + daysInPrevMonth);
-
-    let htmls = '';
-
-    for (let i = daysInPrevMonth; i > 0; i--) {
-        let className = "content__day not-current-month"
-        htmls += `<li class="${className}">
-                  ${prevLastDay - i + 1}
-                 </li>`;
-    }
-
-    for (let i = 1; i <= lastDayDate; i++) {
-        let className = 'content__day';
-        if (i === today && month === currentDate.getMonth() 
-            && year === currentDate.getFullYear()) {
-            className += ' active';
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+    
+        const firstDayIndex = firstDay.getDay();
+        const lastDayDate = lastDay.getDate();
+    
+        const prevLastDay = new Date(year, month, 0).getDate();
+    
+        const daysInCalendar = 42;
+        const daysInPrevMonth = firstDayIndex;
+        const daysInNextMonth = daysInCalendar - (lastDayDate + daysInPrevMonth);
+    
+        let htmls = '';
+    
+        for (let i = daysInPrevMonth; i > 0; i--) {
+            let className = "content__day not-current-month"
+            htmls += `<li class="${className}">
+                      ${prevLastDay - i + 1}
+                     </li>`;
         }
-        htmls += `<li class="${className}">${i}</li>`;
-    }
-
-    for (let i = 1; i <= daysInNextMonth; i++) {
-        let className = "content__day not-current-month"
-        htmls += `<li class="${className}">${i}</li>`;
-    }
-
-    calendar.innerHTML = htmls;
-}
-
-function defaultCalendar() {
-    const today = new Date();
-    const month = today.getMonth();
-    const year = today.getFullYear();
-
-    generateCalendar(year, month);
-}
-
-function showPreviousMonth(year, month) {
-    let monthIndex = months.indexOf(month);
-    monthIndex--;
-    if (monthIndex < 0) {
-        monthIndex = 11;
-        year--;
-    }
-    generateCalendar(year, monthIndex);
-    contentDate.textContent = months[monthIndex] + " " + year;
-}
-
-function showNextMonth(year, month) {
-    let monthIndex = months.indexOf(month);
-    monthIndex++;
-    if (monthIndex > 11) {
-        monthIndex = 0;
-        year++;
-    }
-    generateCalendar(year, monthIndex);
-    contentDate.textContent = months[monthIndex] + " " + year;   
-}
-
-function generateMonthBox(startMonthIndex) {
-    let html = ''; 
-    const currentMonthIndex = new Date().getMonth();
-
-    for (let i = startMonthIndex; i < startMonthIndex + 16; i++) {
-        const monthIndex = i % 12;
-        const monthName = monthInBox[monthIndex];
-        const className01 = (monthIndex === currentMonthIndex) ? 'sub-active' : ''; 
-        const className02 = (i > 11) ? 'not-current-month' : '';
-
-        html += `<li class="${className01} ${className02}">${monthName}</li>`;
-    }
-
-    monthBox.innerHTML = html;
-} 
-
-generateMonthBox(0);
-
-let currentStartYear = Math.floor(new Date().getFullYear() / 10) * 10;
-
-function updateContentDate(startYear) {
-    const endYear = startYear + 9;
-    contentDate.textContent = `${startYear}-${endYear}`;
-}
-
-function generateYearBox(startYear) {
-    let html = ''; // Khởi tạo chuỗi HTML rỗng
-
-    for (let i = 0; i < 16; i++) {
-        const year = startYear + i;
-        const className = (year === new Date().getFullYear()) ? 'sub-active' : ''; // Thêm class 'active' nếu là năm hiện tại
-        html += `<li class="${className}">${year}</li>`;
-    }
-
-    yearBox.innerHTML = html;
-    updateContentDate(startYear);
-}
-
-generateYearBox(currentStartYear)
-
-function showPreviousDecade() {
-    currentStartYear -= 10;
-    generateYearBox(currentStartYear);
-}
-
-function showNextDecade() {
-    currentStartYear += 10;
-    generateYearBox(currentStartYear);
-}
-
-function handleCalendar() {    
-    // Bắt sự kiện khi click vào nút Previous
-    prevMonthBtn.onclick = function() {
-        let currentTime = contentDate.textContent;
-        let text = currentTime.split(' ');
-        let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
-        let currentMonth = text[0];
-        showPreviousMonth(currentYear, currentMonth);
-        showPreviousDecade();
-    }
-
-    // Bắt sự kiện khi click vào nút Next
-    nextMonthBtn.onclick = function() {
-        let currentTime = contentDate.textContent;
-        let text = currentTime.split(' ');
-        let currentYear = Number(text[1]); // Chuyển năm sang số nguyên
-        let currentMonth = text[0];
-        showNextMonth(currentYear, currentMonth);
-        showNextDecade();
-    }
-}
-defaultCalendar();
-handleCalendar();
-
-// prevMonthBtn.onclick = function() {
-//     const currentFirstMonthIndex = monthInBox.indexOf(monthBox.firstChild.textContent);
-//     generateMonthBox(currentFirstMonthIndex - 1);
-// }
-
-// nextMonthBtn.onclick = function() {
-//     const currentFirstMonthIndex = monthInBox.indexOf(monthBox.firstChild.textContent);
-//     generateMonthBox(currentFirstMonthIndex + 1);
-// }
-// showNextMonth(2024, 5)
-
-// generateCalendar();
-
-let countClick = 0;
-
-contentDate.onclick = function() {
-    countClick++;
-
-    if (countClick === 1) {
-        monthBox.style.display = 'flex';
-        calendar.style.display = 'none';
-        contentWeek.style.display = 'none';
-        let currentTime = contentDate.textContent;
-        let text = currentTime.split(' ');
-        let currentYear = Number(text[1]);
-        contentDate.textContent = currentYear.toString();
-    } else if (countClick === 2) {
-        monthBox.style.display = 'none';
-        yearBox.style.display = 'flex';
-        let currentYear = Number(contentDate.textContent);
-        const startYear = Math.floor(currentYear / 10) * 10;
-        const endYear = startYear + 9;
-        contentDate.textContent = `${startYear}-${endYear}`;
-    }
-}
-
-const dayInCalendar = $$(`.content__day`);
-
-let prevDayClick = null;
-
-dayInCalendar.forEach(day => {
-    day.addEventListener('click', function() {
-        if (prevDayClick) {
-            prevDayClick.classList.remove('hover-active');
+    
+        for (let i = 1; i <= lastDayDate; i++) {
+            let className = 'content__day';
+            if (i === today && month === currentDate.getMonth() 
+                && year === currentDate.getFullYear()) {
+                className += ' active';
+            }
+            htmls += `<li class="${className}">${i}</li>`;
         }
+    
+        for (let i = 1; i <= daysInNextMonth; i++) {
+            let className = "content__day not-current-month"
+            htmls += `<li class="${className}">${i}</li>`;
+        }
+    
+        calendar.innerHTML = htmls;
 
-        day.classList.add('hover-active');
-
-        prevDayClick = day;
-    });
-});
-
-headerDate.onclick = function() {
-    countClick = 0;
-    const currentDate = new Date();
-    const currentMonth = months[currentDate.getMonth()];
-    const currentYear = currentDate.getFullYear();
-    contentDate.textContent = `${currentMonth} ${currentYear}`;
-    if (calendar.style.display === 'none' || contentWeek.style.display === 'none') {
         calendar.style.display = 'flex';
         contentWeek.style.display = 'flex';
-    }
-    if (monthBox.style.display === 'flex' || yearBox.style.display === 'flex') {
-        monthBox.style.display = 'none';
         yearBox.style.display = 'none';
+        monthBox.style.display = 'none';
+
+        this.dayClickEvent();
+    },
+    // display current calendar
+    displayCurrentCalendar: function() {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        this.generateCalendar(currentYear, currentMonth);
+    },
+    // generate month box layout
+    generateMonthBox: function() {
+        let html = ''; 
+        const currentMonthIndex = new Date().getMonth();
+    
+        for (let i = 0; i < 16; i++) {
+            const monthIndex = i % 12;
+            const monthName = this.monthsInBox[monthIndex];
+            const clasName00 = 'content__month'
+            const className01 = (monthIndex === currentMonthIndex) ? 'sub-active' : ''; 
+            const className02 = (i > 11) ? 'not-current-month' : '';
+    
+            html += `<li class="${clasName00} ${className01} ${className02}">${monthName}</li>`;
+        }
+    
+        monthBox.innerHTML = html;
+        calendar.style.display = 'none';
+        contentWeek.style.display = 'none';
+        yearBox.style.display = 'none';
+        monthBox.style.display = 'flex';
+
+        if (!this.isMonthClick) { 
+            this.monthClickEvent();
+        }
+    },
+    // generate year box layout
+    generateYearBox: function(startYear) {
+        let html = '';
+
+        for (let i = 0; i < 16; i++) {
+            const year = startYear + i;
+            const clasName00 = 'content__year'
+            const className01 = (year === new Date().getFullYear()) ? 'sub-active' : '';
+            html += `<li class="${clasName00} ${className01}">${year}</li>`;
+        }
+    
+        yearBox.innerHTML = html;
+
+        monthBox.style.display = 'none';
+        yearBox.style.display = 'flex';
+
+        if (!this.isYearClick) {
+            this.yearClickEvent();
+        }
+    },
+    // event day when click
+    dayClickEvent: function() {
+        const _this = this;
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+    
+        const days = $$('.content__day'); 
+    
+        days.forEach(day => {
+            day.addEventListener('click', function() {
+                if (_this.prevDayClick) {
+                    _this.prevDayClick.classList.remove('hover-active');
+                }
+    
+                day.classList.add('hover-active');
+    
+                _this.prevDayClick = day;
+                const dayOfMonth = parseInt(day.textContent);
+                let month = currentMonth;
+                let year = currentYear;
+
+                if (day.classList.contains('not-current-month')) {
+                    const currentDate = contentDate.textContent.split(' ');
+                    const currentMonthIndex = _this.months.indexOf(currentDate[0]);
+                    const displayYear = parseInt(currentDate[1]);
+
+                    if (dayOfMonth < 15) {
+                        month = currentMonthIndex + 1;
+                        if (month > 11) {
+                            month = 0;
+                            year = displayYear +  1;
+                        }
+                    } else {
+                        month = currentMonthIndex - 1;
+                        if (month < 0) {
+                            month = 11;
+                            year = displayYear - 1;
+                        }
+                    }
+                } else {
+                    const currentDate = contentDate.textContent.split(' ');
+                    month = _this.months.indexOf(currentDate[0]);
+                    year = parseInt(currentDate[1]);
+                }
+
+                const clickDate = new Date(year, month, dayOfMonth);
+                const clickWeekday = _this.daysOfWeek[clickDate.getDay()];
+                let textFooterDate = `${clickWeekday} ${dayOfMonth}`;
+
+                const isCurrentMonth = !day.classList.contains('not-current-month');
+                if (isCurrentMonth && dayOfMonth === currentDay) {
+                    textFooterDate = 'Today';
+                }
+
+                footerDate.textContent= textFooterDate;
+            });
+        });
+    },
+    // event month when click
+    monthClickEvent: function() {
+        this.isMonthClick = true;
+        this.isYearClick = false;        
+
+        const _this = this;
+        const months = $$('.content__month');
+
+        months.forEach(month => {
+            month.addEventListener('click', function() {
+                const monthIndex = _this.monthsInBox.indexOf(month.textContent);
+                const currentYear = parseInt(contentDate.textContent);
+                _this.generateCalendar(currentYear, monthIndex);
+                contentDate.textContent = `${_this.months[monthIndex]} ${currentYear}`;
+            });
+        });
+
+        _this.countClick = 0;
+        console.log(this.isMonthClick, this.isYearClick)
+    },
+    // event year when click
+    yearClickEvent: function() {
+        this.isYearClick = true;
+        this.isMonthClick = false;
+
+        const _this = this;
+        const years = $$('.content__year');
+
+        years.forEach(year => {
+            year.addEventListener('click', function() {
+                const currentYear = parseInt(year.textContent);
+                _this.generateMonthBox();
+                contentDate.textContent = currentYear.toString();
+            });
+        });
+    },
+    // event handling
+    handleEvent: function() {
+        const _this = this;
+    
+        // previous month calendar
+        function showPreviousMonth(year, month) {
+            let monthIndex = _this.months.indexOf(month);
+            monthIndex--;
+            if (monthIndex < 0) {
+                monthIndex = 11;
+                year--;
+            }
+            _this.generateCalendar(year, monthIndex);
+            contentDate.textContent = _this.months[monthIndex] + " " + year;
+        };
+
+        // next month calendar
+        function showNextMonth(year, month) {
+            let monthIndex = _this.months.indexOf(month);
+            monthIndex++;
+            if (monthIndex > 11) {
+                monthIndex = 0;
+                year++;
+            }
+            _this.generateCalendar(year, monthIndex);
+            contentDate.textContent = _this.months[monthIndex] + " " + year;   
+        };
+
+        // previous button click event
+        prevBtn.addEventListener('click', function() {
+            if (calendar.style.display === 'flex') {
+                let currentTime = contentDate.textContent;
+                let text = currentTime.split(' ');
+                let currentYear = Number(text[1]); 
+                let currentMonth = text[0];
+                showPreviousMonth(currentYear, currentMonth);
+            }       
+        });
+
+        // next button click event
+        nextBtn.addEventListener('click', function() {
+            let currentTime = contentDate.textContent;
+            let text = currentTime.split(' ');
+            let currentYear = Number(text[1]); 
+            let currentMonth = text[0];
+            showNextMonth(currentYear, currentMonth);
+        }),
+        // date in content when click
+        contentDate.addEventListener('click', function() {
+            _this.countClick++;
+        
+            if (_this.countClick === 1) {
+                let currentTime = contentDate.textContent;
+                let text = currentTime.split(' ');
+                let currentYear = Number(text[1]);
+                contentDate.textContent = currentYear.toString();
+                _this.generateMonthBox();
+            } else if (_this.countClick === 2) {
+                let currentYear = Number(contentDate.textContent);
+                const startYear = Math.floor(currentYear / 10) * 10;
+                const endYear = startYear + 9;
+                contentDate.textContent = `${startYear}-${endYear}`;
+                _this.generateYearBox(startYear);
+            }
+        }),
+        headerDate.addEventListener('click', function() {
+            _this.countClick = 0;
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            contentDate.textContent = `${_this.months[currentDate.getMonth()]} ${currentYear}`;
+            _this.generateCalendar(currentYear, currentMonth);
+        })
+    },
+    start: function() {
+        setInterval(this.displayCurrentTime, 1000);
+
+        this.displayCurrentHeaderDate();
+
+        this.displayCurrentCalendar();
+
+        this.displayCurrentFooterDate();
+
+        this.handleEvent();
+
     }
-    defaultCalendar();
-}
+};
 
-
+app.start();
