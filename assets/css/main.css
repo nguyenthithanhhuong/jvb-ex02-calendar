@@ -1,5 +1,6 @@
 .header {
     height: var(--header-height);
+    z-index: 1;
 }
 
 .footer__date,
@@ -76,6 +77,10 @@
     padding: 0 25px;
 }
 
+.content__main {
+    animation: slideDown 0.5s linear;
+}
+
 .content__day {
     height: calc(var(--footer-height) - 4px);
     line-height: calc(var(--footer-height) - 4px);
@@ -88,7 +93,9 @@
 }
 
 .content__day.active:hover,
-.content__day.hover-active:hover {
+.content__day.hover-active:hover,
+.content__month.sub-active:hover,
+.content__year.sub-active:hover:hover {
     box-shadow: 0 0 0 2px var(--active-bg-color);
 }
 
@@ -117,11 +124,12 @@
 .content__month-box,
 .content__year-box {
     display: none;
+    animation: slideDown 0.5s linear;   
 }
 
 .footer {
     height: var(--footer-height);
-
+    z-index: 1;
 }
 
 .footer__date {

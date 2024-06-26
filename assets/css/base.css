@@ -68,10 +68,28 @@ body {
     box-shadow: 0 0 0 2px var(--active-bg-color);
 }
 
-.not-current-month {
-    opacity: 0.7;
+.none-active {
+    opacity: 0.6;
 }
 
 .pointer {
     cursor: pointer;
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(-50%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(50%);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
