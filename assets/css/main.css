@@ -77,10 +77,6 @@
     padding: 0 25px;
 }
 
-.content__main {
-    animation: slideDown 0.5s linear;
-}
-
 .content__day {
     height: calc(var(--footer-height) - 4px);
     line-height: calc(var(--footer-height) - 4px);
@@ -124,7 +120,6 @@
 .content__month-box,
 .content__year-box {
     display: none;
-    animation: slideDown 0.5s linear;   
 }
 
 .footer {

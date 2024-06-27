@@ -27,6 +27,7 @@ html {
 body {
     position: relative;
     height: 100vh;
+    overflow-x: hidden;
 }
 
 .main {
@@ -74,22 +75,4 @@ body {
 
 .pointer {
     cursor: pointer;
-}
-
-@keyframes slideDown {
-    0% {
-        transform: translateY(-50%);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideDown {
-    0% {
-        transform: translateY(50%);
-    }
-    100% {
-        transform: translateY(0);
-    }
 }
