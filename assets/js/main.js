@@ -271,8 +271,8 @@ const app = {
                 const clickWeekday = _this.daysOfWeek[clickDate.getDay()];
                 let textFooterDate = `${clickWeekday} ${dayOfMonth}`;
 
-                const isCurrentMonth = !day.classList.contains('none-active');
-                if (isCurrentMonth && dayOfMonth === currentDay) {
+                
+                if (month === currentMonth && dayOfMonth === currentDay && year === currentYear) {
                     textFooterDate = 'Today';
                 }
 
